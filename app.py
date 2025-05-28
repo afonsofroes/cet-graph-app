@@ -397,5 +397,6 @@ fig1 = create_interactive_network_horizontal(G, id_to_name)
 
 # ids 3887, 3881, 2210, 2209, 2207
 
+st.set_page_config(layout="wide")
 st.title("Relações Das Funções Da CETBase")
 st.plotly_chart(fig1, use_container_width=True)
