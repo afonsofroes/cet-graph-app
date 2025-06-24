@@ -401,7 +401,7 @@ st.set_page_config(layout="wide")
 st.title("Relações Das Funções Da CETBase")
 
 # Add search functionality
-search_name = st.text_input("Buscar nome do nó (insira o nome exato):")
+search_name = st.text_input("Procurar nome do nó (atenção especial aos acentos!):")
 
 if search_name:
     # Find node ID by name
