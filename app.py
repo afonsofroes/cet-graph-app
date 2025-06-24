@@ -399,4 +399,41 @@ fig1 = create_interactive_network_horizontal(G, id_to_name)
 
 st.set_page_config(layout="wide")
 st.title("Relações Das Funções Da CETBase")
-st.plotly_chart(fig1, use_container_width=True)
+
+# Add search functionality
+search_name = st.text_input("Buscar nome do nó (insira o nome exato):")
+
+if search_name:
+    # Find node ID by name
+    searched_node_id = None
+    for node_id, name in id_to_name.items():
+        if name.lower() == search_name.lower():
+            searched_node_id = node_id
+            break
+
+    if searched_node_id is None:
+        st.warning(f"Nó com nome '{search_name}' não encontrado.")
+    else:
+        # Find a root (node with no parents)
+        roots = [n for n in G.nodes() if G.in_degree(n) == 0]
+        path_found = False
+
+        for root in roots:
+            try:
+                path = nx.shortest_path(G, source=root, target=searched_node_id)
+                path_found = True
+                break  # use the first valid path found
+            except nx.NetworkXNoPath:
+                continue
+
+        if not path_found:
+            st.warning(f"Não há caminho até o nó '{search_name}' a partir de nenhuma raiz.")
+        else:
+            # Filter graph to only include nodes and edges in the path
+            subG = G.subgraph(path).copy()
+            filtered_id_to_name = {node: id_to_name[node] for node in subG.nodes()}
+            fig_filtered = create_interactive_network_horizontal(subG, filtered_id_to_name, title=f"Caminho até '{search_name}'")
+            st.plotly_chart(fig_filtered, use_container_width=True)
+else:
+    st.plotly_chart(fig1, use_container_width=True)
+
