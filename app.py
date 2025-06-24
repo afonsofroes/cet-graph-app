@@ -78,7 +78,7 @@ def hierarchy_pos_horizontal(G, root=None, width=1., vert_gap=1.5, horiz_gap=2.0
 
     return _hierarchy_pos(G, root, width, vert_gap, horiz_gap, xcenter)
 
-def create_interactive_network_horizontal(G, id_to_name, title=""):
+def create_interactive_network_horizontal(G, id_to_name, title="", height=5500):
     """
     Create a horizontal interactive network visualization using Plotly.
     Labels positioned to avoid overlap.
@@ -204,7 +204,7 @@ def create_interactive_network_horizontal(G, id_to_name, title=""):
             plot_bgcolor='white',
             # Set aspect ratio to prevent stretching
             width=5000,
-            height=5500
+            height=height
         )
     )
 
@@ -432,8 +432,7 @@ if search_name:
             # Filter graph to only include nodes and edges in the path
             subG = G.subgraph(path).copy()
             filtered_id_to_name = {node: id_to_name[node] for node in subG.nodes()}
-            fig_filtered = create_interactive_network_horizontal(subG, filtered_id_to_name, title=f"Caminho até '{search_name}'")
+            fig_filtered = create_interactive_network_horizontal(subG, filtered_id_to_name, title=f"Caminho até '{search_name}'", height=200)
             st.plotly_chart(fig_filtered, use_container_width=True)
 else:
     st.plotly_chart(fig1, use_container_width=True)
-
